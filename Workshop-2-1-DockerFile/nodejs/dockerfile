@@ -1,12 +1,14 @@
-FROM labdocker/alpine:latest 
+FROM labdocker/alpine:3.13.6
 LABEL maintainer="Praparn Lueangphoonlap (eva10409@gmail.com)"
 LABEL Description="NodeJS/NGINX Build Container" Version="1.0"
-ENV NODE_VERSION=v8.11.4 NPM_VERSION=5.6.0
+ENV NODE_VERSION=v14.15.4 NPM_VERSION=v14.15.4
 RUN apk update && \
-    apk add nodejs nodejs-npm --no-cache && \
+    apk add nodejs nodejs-npm curl --no-cache && \
     rm -rf /var/cache/apk/*
 RUN mkdir /nodejs
 COPY hello.js /nodejs/
 WORKDIR /nodejs
 ENTRYPOINT ["node","hello.js"]
 EXPOSE 3000
+HEALTHCHECK --interval=15s --timeout=5s --start-period=10s --retries=3 \
+    CMD curl -f http://localhost:3000/ || exit 1

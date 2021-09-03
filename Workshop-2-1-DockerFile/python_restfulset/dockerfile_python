@@ -3,3 +3,5 @@ LABEL maintainer="Praparn Lueangphoonlap (eva10409@gmail.com)"
 LABEL Description="NodeJS/NGINX Build Container" Version="1.0"
 EXPOSE 5000
 CMD [ "python", "main.py" ]
+HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
+    CMD curl -f http://localhost:5000/ || exit 1

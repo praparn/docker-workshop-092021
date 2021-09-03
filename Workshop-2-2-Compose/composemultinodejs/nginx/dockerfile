@@ -13,3 +13,5 @@ COPY labdocker.com.key /etc/nginx/labdocker.com.key
 WORKDIR /usr/sbin
 ENTRYPOINT ["nginx","-c","/etc/nginx/nginx.conf"]
 EXPOSE 8080 8443
+HEALTHCHECK --interval=15s --timeout=5s --start-period=10s --retries=3 \
+    CMD curl -f http://localhost:8080/ || exit 1
