@@ -1,0 +1,19 @@
+For this workshop. We will demonstration how to start portainer server on labdocker
+1. (master) Deploy portainer for swarm with command:
+    cd ~/ &&  curl -L https://downloads.portainer.io/portainer-agent-stack.yml -o portainer-agent-stack.yml
+	docker stack deploy -c portainer-agent-stack.yml portainer
+	watch docker stack ps portainer
+      
+	*Remark: In case standalone docker:
+	 docker volume create --driver local portainer_data
+	 docker run -d -p 8000:8000 -p 9000:9000 --name=portainer \
+	 --restart=always -v /var/run/docker.sock:/var/run/docker.sock \
+	 -v portainer_data:/data portainer/portainer-ce
+
+2. After finish portainer will display ip address and password to access (example):
+	http://<Public IP>:9000
+		
+3. Access via web form and start use
+
+4. CleanUp Lab by command:
+	docker stack rm portainer
