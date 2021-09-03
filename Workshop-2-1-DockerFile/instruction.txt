@@ -54,7 +54,7 @@ Part 3: RESTFUL Python
 	ls ~/docker-workshop-092021/Workshop-2-1-DockerFile
 
 2. Pull require image on lab by command:
-	docker image pull labdocker/mariadb:latest
+	docker image pull labdocker/mariadb:10.5.12
 	docker image pull labdocker/redis:latest
 
 3. Build module "webservice" by command:
@@ -66,7 +66,7 @@ Part 3: RESTFUL Python
 
 4. Setup application stack by command: (Step-by-Step and Check)
 	(maindb: mariadb)
-	docker container run -dt --name maindb --net=restful_switch --network-alias=maindb -e MYSQL_ROOT_PASSWORD=password labdocker/mariadb:latest
+	docker container run -dt --name maindb --net=restful_switch --network-alias=maindb -e MYSQL_ROOT_PASSWORD=password labdocker/mariadb:10.5.12
 
 	(cachedb: redis)
 	docker container run -dt --name cachedb --net=restful_switch --network-alias=cachedb labdocker/redis:latest
