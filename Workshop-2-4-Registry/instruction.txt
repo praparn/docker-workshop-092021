@@ -8,7 +8,7 @@ Part1: Registry on single docker-machine
 docker image pull registry:2.7.1
 
 2. Running registry by command:
-	cd ~/docker-workshop-022021/Workshop-2-4-Registry
+	cd ~/docker-workshop-092021/Workshop-2-4-Registry
 
 	docker container run -d -p 5000:5000 \
 	--restart=always --name registrylab \
@@ -58,15 +58,15 @@ Registry on multihost docker-machine
 	docker image pull registry:2.7.0
 	docker image pull labdocker/alpine:latest
 	cd ~/
-    git clone https://github.com/praparn/docker-workshop-022021.git
+    git clone https://github.com/praparn/docker-workshop-092021.git
 
 10. (Teacher Machine) Check ip address registry machine on control sheet
 
 11. (all) Check folder "Workshop-2-4-Registry" by command
-	ls ~/docker-workshop-022021/Workshop-2-4-Registry
+	ls ~/docker-workshop-092021/Workshop-2-4-Registry
 
 12. (all) Access to folder by command: 
-	cd ~/docker-workshop-022021/Workshop-2-4-Registry
+	cd ~/docker-workshop-092021/Workshop-2-4-Registry
 	pwd
 
 13. (all) Trust certificate via command:
@@ -148,8 +148,8 @@ Registry with Harbor
 		#http:										==> disable http
 		#port:80									==> disable port:80
 		#hostname: reg.mydomain.com					==> hostname: labdocker.com
-		#certificate: /your/certificate/path		==> certificate: /home/ubuntu/docker-workshop-022021/Workshop-2-4-Registry/labdocker.com.crt
-		#private_key: /your/private/key/path		==> private key: /home/ubuntu/docker-workshop-022021/Workshop-2-4-Registry/labdocker.com.key
+		#certificate: /your/certificate/path		==> certificate: /home/ubuntu/docker-workshop-092021/Workshop-2-4-Registry/labdocker.com.crt
+		#private_key: /your/private/key/path		==> private key: /home/ubuntu/docker-workshop-092021/Workshop-2-4-Registry/labdocker.com.key
 		#harbor_admin_password: Harbor12345			==> harbor_admin_password: P@ssw0rd
 
 25. (Teacher Machine) Start harbor with command:
