@@ -1,4 +1,4 @@
-FROM labdocker/alpine:latest 
+FROM labdocker/alpine:3.13.6
 LABEL maintainer="Praparn Lueangphoonlap (eva10409@gmail.com)"
 LABEL Description="NodeJS/NGINX Build Container" Version="1.0"
 ENV NODE_VERSION=v4.3.0 NPM_VERSION=2.14.12
