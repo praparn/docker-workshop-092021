@@ -44,25 +44,25 @@ Part1: Reverse Proxy by DNS
 10. Start Kong api gateway by command:
 	10.1 Prepare space for kong apigateway by command:
 	mkdir ~/kong
-  mkdir ~/kong/postgres
-  mkdir ~/kong/kong-configuration
+    mkdir ~/kong/postgres
+    mkdir ~/kong/kong-configuration
 
   *Remark: Case repeat workshop on no 10
-  sudo rm -rf ~/kong
-  mkdir ~/kong
-  mkdir ~/kong/postgres
-  mkdir ~/kong/kong-configuration
+    sudo rm -rf ~/kong
+    mkdir ~/kong
+    mkdir ~/kong/postgres
+    mkdir ~/kong/kong-configuration
 
 	10.2 Create database by command:
-	docker image pull postgres:9.6.20
+	docker image pull postgres:9.6.23
 	docker container run -dt --name kong-database \
     --network=webinternal -p 5432:5432 \
     --mount type=bind,source=/home/ubuntu/kong/postgres,target=/var/lib/postgresql/data \
     -e "POSTGRES_USER=kong" -e "POSTGRES_DB=kong" -e "POSTGRES_PASSWORD=kong" \
-    postgres:9.6.20
+    postgres:9.6.23
 
 	10.3 Initial database for kong by command:
-  docker pull kong:2.3.0-alpine
+    docker image pull kong:2.5.0-alpine
 	docker container run --rm \
      --network=webinternal \
      -e "KONG_DATABASE=postgres" \
@@ -70,7 +70,7 @@ Part1: Reverse Proxy by DNS
      -e "KONG_PG_PASSWORD=kong" \
      -e "KONG_PG_USER=kong" \
      -e "KONG_PG_DATABASE=kong" \
-     kong:2.3.0-alpine kong migrations bootstrap
+     kong:2.5.0-alpine kong migrations bootstrap
 
 	10.4 Run kong api gateway by command:
 	docker container run -d --name kong \
@@ -89,7 +89,7 @@ Part1: Reverse Proxy by DNS
      -p 443:8443 \
      -p 8001:8001 \
      -p 8444:8444 \
-     kong:2.3.0-alpine
+     kong:2.5.0-alpine
 
 	*Remark: 
 	:8000 on which Kong listens for incoming HTTP traffic from your clients, and forwards it to your upstream services.
@@ -105,10 +105,10 @@ Part1: Reverse Proxy by DNS
     pantsel/konga:next
 
 	10.6 Install PGAdmin by command:
-	docker image pull dpage/pgadmin4:4.29
-  docker container run -p 8080:80 --name pgadmin \
+	docker image pull dpage/pgadmin4:5.6
+    docker container run -p 8080:80 --name pgadmin \
 	--network=webinternal -e "PGADMIN_DEFAULT_EMAIL=kong@localdomain.com" \
-    -e "PGADMIN_DEFAULT_PASSWORD=kong" -d dpage/pgadmin4:4.29
+    -e "PGADMIN_DEFAULT_PASSWORD=kong" -d dpage/pgadmin4:5.6
 
 	10.7 (local) Test open GUI:
 	http://<public ip>:8080		==> PGAdmin (Email Address: kong@localdomain.com, Password: kong) ==> Add Server: <private ip>, username: kong, password:kong
@@ -118,7 +118,7 @@ Part1: Reverse Proxy by DNS
 	curl http://localhost:8001
 
 11 Create upstream server for load balance between web1, web2 by command:
-curl -i -X POST \
+  curl -i -X POST \
   --url http://localhost:8001/upstreams/ \
   --data 'name=upstream-webtestthailand' \
   --data 'hash_on=none' \

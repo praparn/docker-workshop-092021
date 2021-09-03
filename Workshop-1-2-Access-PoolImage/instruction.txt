@@ -10,5 +10,5 @@ Pull image
     docker image pull labdocker/linenotify:bot_v2
     docker image pull labdocker/cluster:webservicelite
 7. Check history of image by command: 
-    docker image history labdocker/alpine:latest
+    docker image history labdocker/alpine:3.13.6
     docker image history labdocker/alpineweb:latest

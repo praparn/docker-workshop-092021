@@ -2,13 +2,13 @@
 1. Check CPU configure on AWS (Need at least 2 CPUs)
 
 2. Download and Run "cAdvisor"
-	2.1 pull image with command: docker image pull labdocker/cadvisor:latest
+	2.1 pull image with command: docker image pull labdocker/cadvisor:0.40.0
 	2.2 docker run with command:
 	docker container run \
 --mount type=bind,source=/var/run,target=/var/run \
 --mount type=bind,source=/sys,target=/sys,readonly \
 --mount type=bind,source=/var/lib/docker,target=/var/lib/docker,readonly \
---publish=8080:8080 --detach=true --name=cadvisor labdocker/cadvisor:latest
+--publish=8080:8080 --detach=true --name=cadvisor labdocker/cadvisor:0.40.0
 
 	2.3 open browser with url: http://<Public IP>:8080 and workthrough
 
@@ -35,5 +35,5 @@ labdocker/busybox:latest md5sum /dev/urandom
 				docker container update --cpu-shares=80 Share_30
 				docker container stats
 
-		3.2.3 stop all container with command:"docker container stop Share_30 Share_70 cadvisor"
-		3.2.4 remove all container with command:"docker container rm Share_30 Share_70 cadvisor"
+		3.2.3 stop all container with command: "docker container stop Share_30 Share_70 cadvisor"
+		3.2.4 remove all container with command: "docker container stop Share_30 Share_70 cadvisor"
