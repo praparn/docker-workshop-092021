@@ -17,8 +17,8 @@ LAB Preparation
 
 	*Remark: If need you can renew clone workshop again by command below:
     cd ~/
-	sudo rm -rf ./docker-workshop-022021
-    git clone https://github.com/praparn/docker-workshop-022021.git
+	sudo rm -rf ./docker-workshop-092021
+    git clone https://github.com/praparn/docker-workshop-092021.git
 
 3. (all node) SSH/Putty to target machine with command below:
 ssh -i docker_lab ubuntu@<Public IP Address of Master>
@@ -152,15 +152,15 @@ Docker config and secret (master)
 ====================================================
 
 1. Access to folder on workshop and check file "nginx.conf","labdocker.com.crt","labdocker.com.key" by command:
-	ls ~/docker-workshop-022021/Workshop-2-5-Swarm/
+	ls ~/docker-workshop-092021/Workshop-2-5-Swarm/
 
 2. Create config file for nginx by command: 
-	docker config create nginx.conf ~/docker-workshop-022021/Workshop-2-5-Swarm/nginx.conf
+	docker config create nginx.conf ~/docker-workshop-092021/Workshop-2-5-Swarm/nginx.conf
 	docker config ls
 
 3. Create secret for .crt and .key by command:
-	docker secret create labdocker.com.crt ~/docker-workshop-022021/Workshop-2-5-Swarm/labdocker.com.crt
-	docker secret create labdocker.com.key ~/docker-workshop-022021/Workshop-2-5-Swarm/labdocker.com.key
+	docker secret create labdocker.com.crt ~/docker-workshop-092021/Workshop-2-5-Swarm/labdocker.com.crt
+	docker secret create labdocker.com.key ~/docker-workshop-092021/Workshop-2-5-Swarm/labdocker.com.key
 	docker secret ls
 
 4. Create service with publish port 443 by command:
@@ -170,7 +170,7 @@ Docker config and secret (master)
      --secret labdocker.com.crt \
      --config source=nginx.conf,target=/etc/nginx/nginx.conf \
      -p 443:443 \
-     labdocker/nginx:latest
+     labdocker/nginx:http2
 
 5. Test access:
 	broswer: https <any public ip address of node>
@@ -203,9 +203,9 @@ Overlay and Ingress Network
 	docker service inspect nodejs			==> Record IP Address (Ex: 192.168.100.2)
 
 5. Test access from container replica1 ==> VIP, replica2 and container replica2 ==> VIP, replica1 by command:
-	docker exec -it nodejs.1.xxx ping 192.168.100.3
+	docker exec -it nodejs.1.xxx ping 192.168.100.4
 	docker exec -it nodejs.1.xxx ping 192.168.100.2
-	docker exec -it nodejs.2.xxx ping 192.168.100.4
+	docker exec -it nodejs.2.xxx ping 192.168.100.3
 	docker exec -it nodejs.2.xxx ping 192.168.100.2
 
 6. Test access via web page of any node's ip address:
@@ -249,16 +249,16 @@ Remove Manager / Worker from Swarm Cluster
 	docker node ls
 
 4. (worker2) Rejoin workder2 as manager by join token command:
-docker swarm join --token SWMTKN-1-1qnpobqw0hilpc5i90sz803tlhyi1h4k84uok10y814bvhyqf2-3u9rqxfwhbhw52qwqeeiewybl 10.0.1.104:2377
-docker node ls
+    docker swarm join --token SWMTKN-1-1qnpobqw0hilpc5i90sz803tlhyi1h4k84uok10y814bvhyqf2-3u9rqxfwhbhw52qwqeeiewybl 10.0.1.104:2377
+    docker node ls
 
 ==================================================
 Swarm Compose
 ==================================================
-1. (master) check folder python_restfulset by command: ls ~/docker-workshop-022021/Workshop-2-5-Swarm/python_restfulset/
+1. (master) check folder python_restfulset by command: ls ~/docker-workshop-092021/Workshop-2-5-Swarm/python_restfulset/
 
 2. (master) Deploy application stack by command:
-	cd ~/docker-workshop-022021/Workshop-2-5-Swarm/python_restfulset/
+	cd ~/docker-workshop-092021/Workshop-2-5-Swarm/python_restfulset/
 	docker stack deploy -c docker-compose_swarm.yml webservice
 
 3. (master) Monitor status of service/application stack by command: (5 - 10 min)
