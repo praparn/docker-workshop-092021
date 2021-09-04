@@ -112,7 +112,7 @@ Registry on multihost docker-machine
 	docker image push labdocker.com:5000/alpine:1.0
 
 	docker logout labdocker.com:5000
-	*REMARK: digest: sha256:d0710affa17fad5f466a70159cc458227bd25d4afb39514ef662ead3e6c99515 size: 506
+	*REMARK: 1.0: digest: sha256:e15947432b813e8ffa90165da919953e2ce850bef511a0ad1287d7cb86de84b5 size: 528
 
 20. (all) Test pull image from registry machine by command:
 	docker login labdocker.com:5000
@@ -138,8 +138,8 @@ Registry with Harbor
 
 23. (Teacher Machine) Setup Harbor Registry by command:
 	cd ~
-	wget https://github.com/goharbor/harbor/releases/download/v2.2.1/harbor-online-installer-v2.2.1.tgz
-	tar xvf harbor-online-installer-v2.2.1.tgz && cd ./harbor
+	wget https://github.com/goharbor/harbor/releases/download/v2.3.2/harbor-online-installer-v2.3.2.tgz
+	tar xvf harbor-online-installer-v2.3.2.tgz && cd ./harbor
 
 24. (Teacher Machine) Configure initial start by command:
 	cp harbor.yml.tmpl harbor.yml
