@@ -153,6 +153,7 @@ more /tmp/anchore_security_only.json
 20. ClearUp lab by command:
 cd ~/anchore-volume
 docker-compose down
+cd ~/
 rm -rf ~/anchore-volume
 
 
