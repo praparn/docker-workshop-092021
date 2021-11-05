@@ -21,15 +21,19 @@ Part1: Docker Bench for Security
 4. Enhance audit by command:
 	sudo su -
 	apt-get install -y auditd
-	echo "-w /usr/bin/docker -p wa" >> /etc/audit/rules.d/audit.rules
+	echo "-w /run/containerd -p wa" >> /etc/audit/rules.d/audit.rules
 	echo "-w /var/lib/docker -p wa" >> /etc/audit/rules.d/audit.rules
-	echo "-w /usr/bin/docker -k docker" >> /etc/audit/rules.d/audit.rules
+	echo "-w /etc/docker -k docker" >> /etc/audit/rules.d/audit.rules
 	echo "-w /lib/systemd/system/docker.service -p wa" >> /etc/audit/rules.d/audit.rules
-	echo "-w /lib/systemd/system/docker.socket -p wa" >> /etc/audit/rules.d/audit.rules
+	echo "-w /lib/systemd/system/containerd.sock -p wa" >> /etc/audit/rules.d/audit.rules
 	echo "-w /etc/default/docker -p wa" >> /etc/audit/rules.d/audit.rules
 	echo "-w /etc/docker/daemon.json -p wa" >> /etc/audit/rules.d/audit.rules
-	echo "-w /usr/bin/docker-containerd -p wa" >> /etc/audit/rules.d/audit.rules
-	echo "-w /usr/bin/docker-runc -p wa" >> /etc/audit/rules.d/audit.rules
+	echo "-w /etc/containerd/config.toml -p wa" >> /etc/audit/rules.d/audit.rules
+	echo "-w /usr/bin/containerd  -p wa" >> /etc/audit/rules.d/audit.rules
+	echo "-w /usr/bin/containerd-shim  -p wa" >> /etc/audit/rules.d/audit.rules
+	echo "-w /usr/bin/containerd-shim-runc-v1  -p wa" >> /etc/audit/rules.d/audit.rules
+	echo "-w /usr/bin/containerd-shim-runc-v2  -p wa" >> /etc/audit/rules.d/audit.rules
+	echo "-w /usr/bin/runc  -p wa" >> /etc/audit/rules.d/audit.rules
 	systemctl restart auditd
 	systemctl enable auditd
 	auditctl -l
@@ -88,6 +92,7 @@ anchore-volume_db_1              docker-entrypoint.sh postgres    Up            
 anchore-volume_policy-engine_1   /docker-entrypoint.sh anch ...   Up (healthy)   8228/tcp
 anchore-volume_queue_1           /docker-entrypoint.sh anch ...   Up (healthy)   8228/tcp
 -----------------------------------------------------
+*Remark: catalog may a bit unhealthy and need to restart by command: docker container restart anchore-volume_catalog_1
 
 7. Test list image on anchore inventory by command:
 anchore-cli image list
