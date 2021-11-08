@@ -4,7 +4,7 @@ Part1: Docker Bench for Security
 -----------------------------------------------------------------------------------------------------------------
 1. Pull script from git by command: "cd ~/ && git clone https://github.com/docker/docker-bench-security.git"
 
-2. Build docker image by command: "cd docker-bench-security && ./docker-bench-security.sh"
+2. Build docker image by command: "cd ~/docker-bench-security && sudo sh ./docker-bench-security.sh"
 
 3. Run docker container for security scan by command:
 	docker container run --rm --net host --pid host --userns host --cap-add audit_control \
@@ -21,6 +21,7 @@ Part1: Docker Bench for Security
 4. Enhance audit by command:
 	sudo su -
 	apt-get install -y auditd
+	echo "-w /usr/bin/dockerd -k docker" >> /etc/audit/rules.d/audit.rules
 	echo "-w /run/containerd -p wa" >> /etc/audit/rules.d/audit.rules
 	echo "-w /var/lib/docker -p wa" >> /etc/audit/rules.d/audit.rules
 	echo "-w /etc/docker -k docker" >> /etc/audit/rules.d/audit.rules
@@ -39,122 +40,35 @@ Part1: Docker Bench for Security
 	auditctl -l
 	exit
 
-5. Run docker container for security scan by command:
-	docker container run --rm --net host --pid host --userns host --cap-add audit_control \
-    -e DOCKER_CONTENT_TRUST=$DOCKER_CONTENT_TRUST \
-    -v /etc:/etc:ro \
-    -v /usr/bin/containerd:/usr/bin/containerd:ro \
-    -v /usr/bin/runc:/usr/bin/runc:ro \
-    -v /usr/lib/systemd:/usr/lib/systemd:ro \
-    -v /var/lib:/var/lib:ro \
-    -v /var/run/docker.sock:/var/run/docker.sock:ro \
-    --label docker_bench_security \
-    docker/docker-bench-security
+5. Retest security scan again by command: "cd ~/docker-bench-security && sudo sh ./docker-bench-security.sh"
 6. CleanUp Lab by command:
 	cd ~/
-	rm -rf ~/docker-bench-security
+	sudo rm -rf ~/docker-bench-security
+
+
 -----------------------------------------------------------------------------------------------------------------
-Part2: Docker vulnerability scan via Anchore
+Part2: Docker vulnerability scan
 -----------------------------------------------------------------------------------------------------------------
-1. Install anchore cli for interact with scanning system by command:
-sudo add-apt-repository universe
-sudo apt install -y python3-pip
-pip3 install anchorecli
+1. Login to docker account for turn-on feature:
+docker login (input username/password)
 
-2. Create volume for persistency storage by command: 
-mkdir ~/anchore-volume
-cd ~/anchore-volume
+2. Active scan image on github by command:
+cd ~
+docker scan <account>/alpineweb:latest
 
-3. Download docker-compose by command:
-curl https://engine.anchore.io/docs/quickstart/docker-compose.yaml > docker-compose.yaml
+3. Test build image of dockerfile by command:
+docker image build -t labdocker/web:1.0 ~/docker-workshop-092021/Workshop-2-1-DockerFile/nginx
+docker image ls
 
-4. Start deploy anchore by command:
-docker-compose pull
-docker-compose up -d
+4. Active scan image and docker file by command
+docker scan --file ~/docker-workshop-092021/Workshop-2-1-DockerFile/nodejs/dockerfile labdocker/web:1.0
 
-5. Export environment variable for start operate:
-export ANCHORE_CLI_URL=http://localhost:8228/v1
-export ANCHORE_CLI_USER=admin
-export ANCHORE_CLI_PASS=foobar
-export PATH="$HOME/.local/bin/:$PATH"
+5. Active scan image (base) by command:
+docker scan labdocker/alpineweb:latest
 
-6. Check status of anchore by command: (Wait 5 - 10 min for download database)
-watch docker-compose ps
------------------------------------------------------
-Example Output:
------------------------------------------------------
-             Name                           Command                  State               Ports
--------------------------------------------------------------------------------------------------------
-anchore-volume_analyzer_1        /docker-entrypoint.sh anch ...   Up (healthy)   8228/tcp
-anchore-volume_api_1             /docker-entrypoint.sh anch ...   Up (healthy)   0.0.0.0:8228->8228/tcp
-anchore-volume_catalog_1         /docker-entrypoint.sh anch ...   Up (healthy)   8228/tcp
-anchore-volume_db_1              docker-entrypoint.sh postgres    Up             5432/tcp
-anchore-volume_policy-engine_1   /docker-entrypoint.sh anch ...   Up (healthy)   8228/tcp
-anchore-volume_queue_1           /docker-entrypoint.sh anch ...   Up (healthy)   8228/tcp
------------------------------------------------------
-*Remark: catalog may a bit unhealthy and need to restart by command: docker container restart anchore-volume_catalog_1
-
-7. Test list image on anchore inventory by command:
-anchore-cli image list
-
-8. Add image for anchore's inventory by command:
-anchore-cli image add kong:2.5.0-alpine
-anchore-cli image add bitnami/postgresql:latest
-anchore-cli image add labdocker/alpine:latest
-anchore-cli image add labdocker/alpineweb:latest
-
-9. Check status of image analysis by command: (Wait 5 min for analyze)
-watch anchore-cli image list
-
-10. Get overview of each image analyze result by command:
-anchore-cli image get kong:2.5.0-alpine
-anchore-cli image get bitnami/postgresql:latest
-anchore-cli image get labdocker/alpine:latest
-anchore-cli image get labdocker/alpineweb:latest
-
-11. Check status of anchore system sync database for vulnerability by command:
-anchore-cli system feeds list
-
-12. Check image content scan by command:
-anchore-cli image content kong:2.5.0-alpine os
-anchore-cli image content bitnami/postgresql:latest files
-anchore-cli image content labdocker/alpine:latest os
-anchore-cli image content labdocker/alpineweb:latest os
-
-13. Check vulnerability scan for image by command:
-anchore-cli image vuln kong:2.5.0-alpine all
-anchore-cli image vuln bitnami/postgresql:latest all
-anchore-cli image vuln labdocker/alpine:latest all
-anchore-cli image vuln labdocker/alpineweb:latest all
-
-14. Check scan policy list by command:
-anchore-cli policy hub list
-
-15. Download policy for "anchore_security_only" by command:
-anchore-cli policy hub get anchore_security_only
-
-16. Install policy by command:
-anchore-cli policy hub install anchore_security_only
-
-17. Check and activate new policy by command:
-anchore-cli policy list
-anchore-cli policy activate anchore_security_only
-
-18. Check vulnerability scan for image by command:
-anchore-cli image vuln kong:2.5.0-alpine all
-anchore-cli image vuln bitnami/postgresql:latest all
-anchore-cli image vuln labdocker/alpine:latest all
-anchore-cli image vuln labdocker/alpineweb:latest all
-
-19. Check json of policyby command:
-anchore-cli --json policy hub get anchore_security_only > /tmp/anchore_security_only.json
-more /tmp/anchore_security_only.json
-
-20. ClearUp lab by command:
-cd ~/anchore-volume
-docker-compose down
-cd ~/
-rm -rf ~/anchore-volume
+6. Docker logout by command:
+docker image remove labdocker/web:1.0
+docker logout
 
 
 -----------------------------------------------------------------------------------------------------------------
