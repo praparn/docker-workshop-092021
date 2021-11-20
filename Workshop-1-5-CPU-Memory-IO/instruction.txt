@@ -36,4 +36,4 @@ labdocker/busybox:latest md5sum /dev/urandom
 				docker container stats
 
 		3.2.3 stop all container with command: "docker container stop Share_30 Share_70 cadvisor"
-		3.2.4 remove all container with command: "docker container stop Share_30 Share_70 cadvisor"
+		3.2.4 remove all container with command: "docker container rm Share_30 Share_70 cadvisor"
