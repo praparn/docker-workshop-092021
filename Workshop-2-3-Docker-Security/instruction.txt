@@ -47,32 +47,7 @@ Part1: Docker Bench for Security
 
 
 -----------------------------------------------------------------------------------------------------------------
-Part2: Docker vulnerability scan
------------------------------------------------------------------------------------------------------------------
-1. Login to docker account for turn-on feature:
-docker login (input username/password)
-
-2. Active scan image on github by command:
-cd ~
-docker scan <account>/alpineweb:latest
-
-3. Test build image of dockerfile by command:
-docker image build -t labdocker/web:1.0 ~/docker-workshop-092021/Workshop-2-1-DockerFile/nginx
-docker image ls
-
-4. Active scan image and docker file by command
-docker scan --file ~/docker-workshop-092021/Workshop-2-1-DockerFile/nodejs/dockerfile labdocker/web:1.0
-
-5. Active scan image (base) by command:
-docker scan labdocker/alpineweb:latest
-
-6. Docker logout by command:
-docker image remove labdocker/web:1.0
-docker logout
-
-
------------------------------------------------------------------------------------------------------------------
-Part3: Apparmor in Container
+Part2: Apparmor in Container
 -----------------------------------------------------------------------------------------------------------------
 1. Run container for test default profile of Apparmor by command: "docker container run -dt --name sectestdefault labdocker/alpine:latest sh"
 
@@ -123,7 +98,7 @@ Part3: Apparmor in Container
 
 
 -----------------------------------------------------------------------------------------------------------------
-Part4: Content Trust (Signed Image)
+Part3: Content Trust (Signed Image)
 -----------------------------------------------------------------------------------------------------------------
 1. Enable content trust feature by command:
 export DOCKER_CONTENT_TRUST=1
@@ -183,8 +158,10 @@ tar -xzvf ./private_keys_backup.tar.gz -C ~/temp
 cp -r ~/temp/home/docker/.docker/trust/private/* ~/.docker/trust/private && rm -rf ~/temp
 
 6. Remove existing image and test pull image from hub.docker.com by command:
+docker login
 docker image remove <username>/alpine:sign
 docker image ls
 docker image pull <username>/alpine:sign
 docker image ls
+docker logout
 export DOCKER_CONTENT_TRUST=0
